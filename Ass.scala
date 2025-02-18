@@ -16,8 +16,8 @@ object Person
 object PersonTest extends App 
 {
   // Instantiate Objects
-  val person1 = new Person("Alice", 25)
-  val person2 = Person("Bob", 30) // Using companion object apply method
+  val person1 = new Person("Sandhya", 25)
+  val person2 = Person("Ayuu", 30) // Using companion object apply method
   
   // Invoke the greet method
   println(person1.greet())
