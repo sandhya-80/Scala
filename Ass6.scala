@@ -1,4 +1,3 @@
-import scala.reflect.Selectable.reflectiveSelectable
 object ControlAbstraction extends App {
   // 1. Custom Control Structure
   def repeat(n: Int)(block: => Unit): Unit = {
@@ -12,7 +11,7 @@ object ControlAbstraction extends App {
     def close(): Unit = println("Resource closed")
   }
 
-  def using[T <: Selectable](resource: T)(block: T => Unit): Unit = {
+  def using[T <: { def close(): Unit }](resource: T)(block: T => Unit): Unit = {
     try {
       block(resource)
     } finally {
@@ -28,12 +27,14 @@ object ControlAbstraction extends App {
     assert(count == 5, "repeat function failed")
   }
 
+  val resourceList = List(new Resource, new Resource)
   Console.withOut(output) {
-    using(new Resource) { resource =>
-      resource.use()
+    resourceList.foreach { resource =>
+      using(resource) { _.use() }
     }
   }
 
+  println(s"Resources Used: $resourceList")
   println(output.toString)
   println("All tests passed!")
 }
